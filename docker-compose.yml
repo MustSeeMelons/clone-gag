@@ -1,0 +1,7 @@
+version: "3"
+services:
+  clone_gag:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
