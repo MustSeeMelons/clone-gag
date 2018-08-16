@@ -1,6 +1,5 @@
 package com.strautins.CloneGag.configuration;
 
-import com.strautins.CloneGag.controllers.TestController;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 public class CloneGagInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
