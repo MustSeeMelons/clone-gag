@@ -7,26 +7,43 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 
+import javax.sql.DataSource;
+
 @Configuration
 @EnableWebSecurity
 public class CloneGagSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
+    DataSource dataSource;
+
+    @Autowired
     public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-        // Can choose JDBC, LDAP and other authentications
-        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("ADMIN");
-        auth.inMemoryAuthentication().withUser("dba").password("dba").roles("ADMIN", "DBA");
+
+        auth.inMemoryAuthentication().withUser("admin").password("admin").roles("USER");
+
+        // TODO jdbcAuth is not working
+//        auth.jdbcAuthentication().dataSource(dataSource)
+//                .usersByUsernameQuery("select user_name, password, true from gag.users where user_name=?")
+//                .authoritiesByUsernameQuery("select user_name, role from gag.user_roles where user_name=?");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
+        // @formatter:off
         http.authorizeRequests()
-                .antMatchers("/", "/home").permitAll()
-                .antMatchers("/admin/**").access("hasRole('ADMIN')")
-                .antMatchers("/db/**").access("hasRole('ADMIN') and hasRole('DBA')")
-                .and().formLogin()
-                .and().exceptionHandling().accessDeniedPage("/Access_Denied");
-
+                .antMatchers("/post/new").access("hasRole('USER')")
+                .anyRequest().permitAll()
+                .and()
+                    .formLogin()
+                        .loginPage("/login")
+                        .usernameParameter("username")
+                        .passwordParameter("password")
+                .and()
+                    .logout().logoutSuccessUrl("/login")
+                .and()
+                    .exceptionHandling().accessDeniedPage("/denied")
+                .and()
+                    .csrf().disable();
+        // @formatter:on
     }
 }

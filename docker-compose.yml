@@ -3,6 +3,8 @@ services:
   clone_gag:
     build:
       context: .
+    links:
+      - db
     ports:
     - "8080:8080"
   db:
