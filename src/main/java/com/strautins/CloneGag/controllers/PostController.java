@@ -1,6 +1,7 @@
 package com.strautins.CloneGag.controllers;
 
 import com.strautins.CloneGag.model.Post;
+import com.strautins.CloneGag.security.CloneGagUserDetails;
 import com.strautins.CloneGag.service.PostService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -46,18 +47,20 @@ public class PostController {
      * @param modelMap ModelMap
      * @return
      */
-    @RequestMapping(value = {"/save"}, method = RequestMethod.POST)
-    public String savePost(Post post, BindingResult result, ModelMap modelMap) {
+    @RequestMapping(value = {"/new"}, method = RequestMethod.POST)
+    public String newPost(Post post, BindingResult result, ModelMap modelMap) {
         post.setCreateDate(new Date());
 
-        // TODO need our custom user here, with id
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = auth.getPrincipal();
+        if (principal instanceof CloneGagUserDetails) {
+            post.setOwner(((CloneGagUserDetails) principal).getId());
+        }
 
         postService.savePost(post);
 
         modelMap.addAttribute("post", post);
 
-        // TODO redirect?
         return "viewPost";
     }
 

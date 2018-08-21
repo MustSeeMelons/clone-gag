@@ -17,7 +17,7 @@
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <p class="lead">Impress someone.</p>
-                    <form:form method="post" modelAttribute="post" action="save" enctype="multipart/form-data">
+                    <form:form method="post" modelAttribute="post" action="new" enctype="multipart/form-data">
                         <div class="form-group">
                             <label for="title">Title:</label>
                             <form:input type="text" class="form-control" path="title" id="title" placeholder="Catchy post title"/>

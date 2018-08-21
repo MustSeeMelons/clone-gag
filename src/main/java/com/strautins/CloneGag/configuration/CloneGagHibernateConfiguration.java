@@ -33,7 +33,7 @@ public class CloneGagHibernateConfiguration {
         return sessionFactory;
     }
 
-    @Bean
+    @Bean(name = "postgres")
     public DataSource dataSource() {
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));

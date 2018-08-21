@@ -15,6 +15,7 @@
             <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"></div>
                 <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4">
                     <strong class="lead text-center">You are denied.</strong>
+                    <p>${user}</p>
                 </div>
                 <div class="col-4 col-sm-4 col-md-4 col-lg-4 col-xl-4"></div>
             </div>

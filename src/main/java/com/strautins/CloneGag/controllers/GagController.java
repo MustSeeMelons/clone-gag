@@ -30,6 +30,12 @@ public class GagController {
 
     @RequestMapping(value = {"/denied"}, method = RequestMethod.GET)
     public String denied(ModelMap modelMap) {
+        modelMap.addAttribute("user", getPrincipal());
         return "accessDenied";
+    }
+
+    private String getPrincipal() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return principal.toString();
     }
 }
