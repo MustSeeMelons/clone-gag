@@ -40,6 +40,7 @@ public class PostController {
         LOG.debug("PostController: /new");
         Post post = new Post();
         modelMap.addAttribute("post", post);
+        modelMap.addAttribute("pageTitle", "New Post");
         return "newPost";
     }
 
@@ -64,6 +65,7 @@ public class PostController {
         modelMap.addAttribute("tags", post.getTags());
         modelMap.addAttribute("image", post.getBase64EncodedImage());
 
+        modelMap.addAttribute("pageTitle", "Your New Post");
         return "viewPost";
     }
 
@@ -77,6 +79,7 @@ public class PostController {
         modelMap.addAttribute("tags", post.getTags());
         modelMap.addAttribute("image", post.getBase64EncodedImage());
 
+        modelMap.addAttribute("pageTitle", "A Fancy Post");
         return "viewPost";
     }
 }

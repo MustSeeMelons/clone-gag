@@ -22,9 +22,12 @@ CREATE TABLE gag.USER_ROLES(
     UNIQUE(user_name, role)
 );
 
--- Setup admin account
+-- Setup accounts
 INSERT INTO gag.USERS(user_name, password, enabled) VALUES('admin', 'admin', TRUE);
+INSERT INTO gag.USERS(user_name, password, enabled) VALUES('test', 'test', TRUE);
+
 INSERT INTO gag.USER_ROLES(user_name, role) VALUES('admin', 'ROLE_USER');
+INSERT INTO gag.USER_ROLES(user_name, role) VALUES('test', 'ROLE_TEST');
 
 CREATE TABLE gag.POSTS(
     id SERIAL PRIMARY KEY,

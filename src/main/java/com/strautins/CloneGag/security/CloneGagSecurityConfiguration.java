@@ -41,6 +41,7 @@ public class CloneGagSecurityConfiguration extends WebSecurityConfigurerAdapter 
                 .and()
                     .formLogin()
                         .loginPage("/login")
+                        .defaultSuccessUrl("/")
                 .and()
                     .exceptionHandling().accessDeniedPage("/denied")
                 .and()

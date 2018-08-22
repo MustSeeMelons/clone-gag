@@ -7,11 +7,18 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta "content-type=text/html">
         <link href="<c:url value='/static/css/bootstrap.min.css'/>" rel="stylesheet"></link>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
         <title>Login</title>
     </head>
     <body>
-        <div class="container">
-            <div class="row mt-2 mb-2 pt-2 pb-2">
+        <div class="container mt-4 mb-5 pt-5 pb-2">
+            <nav class="navbar fixed-top navbar-expand navbar-light bg-light justify-content-center align-items-center">
+                 <a class="navbar-brand" href="/">
+                    <span class="fa fa-microchip"></span>
+                    CloneGag
+                 </a>
+            </nav>
+            <div class="row">
             <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
                     <p class="lead">Login you pleb.</p>
