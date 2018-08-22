@@ -1,7 +1,10 @@
 package com.strautins.CloneGag.model;
 
+import com.strautins.CloneGag.utils.ImageUtils;
+
 import javax.persistence.*;
 import java.math.BigInteger;
+import java.util.Base64;
 import java.util.Date;
 
 @Entity
@@ -28,6 +31,14 @@ public class Post {
 
     @Column(name = "m_date")
     private Date modifiedDate;
+
+    public String getBase64EncodedImage() {
+        if (image != null && image.length > 0) {
+            String mime = ImageUtils.getSupportedMime(image);
+            return "data:" + mime + ";base64, " + Base64.getEncoder().encodeToString(image);
+        }
+        return null;
+    }
 
     public BigInteger getId() {
         return id;

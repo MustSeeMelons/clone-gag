@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigInteger;
 
 @Service
 @Transactional
@@ -17,5 +18,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public void savePost(Post post) {
         postDao.savePost(post);
+    }
+
+    @Override
+    public Post loadPost(BigInteger id) {
+        return postDao.loadPost(id);
     }
 }

@@ -37,7 +37,7 @@ public class CloneGagSecurityConfiguration extends WebSecurityConfigurerAdapter 
         // @formatter:off
         http.authorizeRequests()
                 .antMatchers("/").permitAll()
-                .antMatchers("/post/**").hasRole("USER")
+                .antMatchers("/post/new").hasRole("USER")
                 .and()
                     .formLogin()
                         .loginPage("/login")

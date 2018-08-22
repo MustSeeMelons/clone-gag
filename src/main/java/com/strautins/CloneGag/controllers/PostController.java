@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -48,9 +50,8 @@ public class PostController {
      * @return
      */
     @RequestMapping(value = {"/new"}, method = RequestMethod.POST)
-    public String newPost(Post post, BindingResult result, ModelMap modelMap) {
+    public String newPost(@ModelAttribute("post") @Validated Post post, BindingResult result, ModelMap modelMap) {
         post.setCreateDate(new Date());
-
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Object principal = auth.getPrincipal();
         if (principal instanceof CloneGagUserDetails) {
@@ -59,14 +60,23 @@ public class PostController {
 
         postService.savePost(post);
 
-        modelMap.addAttribute("post", post);
+        modelMap.addAttribute("title", post.getTitle());
+        modelMap.addAttribute("tags", post.getTags());
+        modelMap.addAttribute("image", post.getBase64EncodedImage());
 
         return "viewPost";
     }
 
     @RequestMapping(value = {"/view/{id}"}, method = RequestMethod.GET)
-    public String viewPost(@PathVariable(value = "id", required = false) BigInteger id, ModelMap modelMap) {
-        // TODO load in post from db
+    public String viewPost(@PathVariable(value = "id") BigInteger id, ModelMap modelMap) {
+        LOG.debug("PostController: Loading post with id: " + id);
+
+        Post post = postService.loadPost(id);
+
+        modelMap.addAttribute("title", post.getTitle());
+        modelMap.addAttribute("tags", post.getTags());
+        modelMap.addAttribute("image", post.getBase64EncodedImage());
+
         return "viewPost";
     }
 }

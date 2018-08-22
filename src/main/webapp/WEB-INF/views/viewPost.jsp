@@ -17,7 +17,18 @@
             <div class="row mt-2 mb-2 pt-2 pb-2">
             <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <p class="lead">${post.title}</p>
+
+                    <div class="card">
+                        <div class="card-header">
+                            ${title}
+                        </div>
+                        <div class="card-body">
+                            <img class="img-fluid" src="${image}"/>
+                        </div>
+                         <div class="card-footer text-muted">
+                            ${tags}
+                         </div>
+                    </div>
                 </div>
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
             </div>
