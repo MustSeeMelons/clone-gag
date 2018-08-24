@@ -7,7 +7,10 @@ import java.math.BigInteger;
 
 public interface UserService {
     CloneGagUser getByUserName(String username) throws UsernameNotFoundException;
+
     BigInteger getCurrentUserId();
+
     Boolean isLoggedIn();
-    void register();
+
+    void save(CloneGagUser user);
 }

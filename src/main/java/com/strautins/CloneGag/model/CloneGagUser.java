@@ -5,6 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -21,9 +23,13 @@ public class CloneGagUser implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
 
+    @NotNull
+    @NotEmpty
     @Column(name = "user_name", nullable = false)
     private String username;
 
+    @NotNull
+    @NotEmpty
     @Column(nullable = false)
     private String password;
 

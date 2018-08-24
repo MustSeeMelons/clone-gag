@@ -36,4 +36,9 @@ public class UserDaoImpl implements UserDao {
         }
         throw new UsernameNotFoundException("Could not find user by username: " + username);
     }
+
+    @Override
+    public void saveUser(CloneGagUser user) {
+        sessionFactory.getCurrentSession().save(user);
+    }
 }

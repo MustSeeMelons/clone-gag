@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register() {
-
+    public void save(CloneGagUser user) {
+        userDao.saveUser(user);
     }
 }
