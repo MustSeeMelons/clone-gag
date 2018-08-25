@@ -2,6 +2,8 @@ package com.strautins.CloneGag.configuration;
 
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
+import javax.servlet.ServletRegistration;
+
 public class CloneGagInitializer extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override
@@ -17,5 +19,12 @@ public class CloneGagInitializer extends AbstractAnnotationConfigDispatcherServl
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
+    }
+
+    @Override
+    protected void customizeRegistration(ServletRegistration.Dynamic registration) {
+        // For the global exception handler
+        boolean done = registration.setInitParameter("throwExceptionIfNoHandlerFound", "true");
+        if (!done) throw new RuntimeException();
     }
 }

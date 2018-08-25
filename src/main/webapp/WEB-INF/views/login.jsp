@@ -13,7 +13,7 @@
     <body>
         <div class="container mt-4 mb-5 pt-5 pb-2">
             <nav class="navbar fixed-top navbar-expand navbar-light bg-light justify-content-center align-items-center">
-                 <a class="navbar-brand" href="/">
+                 <a class="navbar-brand" href="/cloneGag">
                     <span class="fa fa-microchip"></span>
                     CloneGag
                  </a>

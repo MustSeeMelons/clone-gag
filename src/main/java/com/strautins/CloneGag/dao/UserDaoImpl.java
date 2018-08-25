@@ -8,10 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 @Repository
 public class UserDaoImpl implements UserDao {
 
@@ -20,16 +16,11 @@ public class UserDaoImpl implements UserDao {
     @Autowired
     private SessionFactory sessionFactory;
 
-    // TODO So so ugly.. time for iBatis?
     @Override
     public CloneGagUser getByUserName(String username) throws UsernameNotFoundException {
-        CriteriaBuilder builder = sessionFactory.getCurrentSession().getCriteriaBuilder();
-        CriteriaQuery<CloneGagUser> criteriaQuery = builder.createQuery(CloneGagUser.class);
-        Root<CloneGagUser> root = criteriaQuery.from(CloneGagUser.class);
-        criteriaQuery.select(root);
-        criteriaQuery.where(builder.equal(root.get("username"), username));
-
-        CloneGagUser user = sessionFactory.getCurrentSession().createQuery(criteriaQuery).getSingleResult();
+        CloneGagUser user = (CloneGagUser) sessionFactory.getCurrentSession()
+                .createQuery("from CloneGagUser c where c.username =:username")
+                .setParameter("username", username).getSingleResult();
 
         if (user != null) {
             return user;
@@ -40,5 +31,12 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void saveUser(CloneGagUser user) {
         sessionFactory.getCurrentSession().save(user);
+    }
+
+    @Override
+    public Boolean isUsernameTaken(String username) {
+        return sessionFactory.getCurrentSession()
+                .createQuery("from CloneGagUser c where c.username =:username")
+                .setParameter("username", username).getSingleResult() != null;
     }
 }

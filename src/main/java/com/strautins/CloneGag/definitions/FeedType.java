@@ -1,4 +1,4 @@
-package com.strautins.CloneGag.exceptions;
+package com.strautins.CloneGag.definitions;
 
 public enum FeedType {
     FRESH("FRESH"),

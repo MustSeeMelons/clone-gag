@@ -6,9 +6,9 @@
     <div class="row">
         <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
             <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                <div class="card-deck">
+                <div>
                     <c:forEach items="${posts}" var="post">
-                        <div class="card">
+                        <div class="card mx-auto m-5">
                             <div class="card-header">
                                 ${post.getTitle()}
                             </div>

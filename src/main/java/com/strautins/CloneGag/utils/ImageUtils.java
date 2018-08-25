@@ -8,11 +8,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ImageUtils {
+
     private static Tika tika = new Tika();
 
     private static List<String> supportedMimes = new ArrayList<String>() {
         {
-            add("image/jpg");
+            add("image/jpeg");
             add("image/png");
         }
     };
@@ -21,6 +22,7 @@ public class ImageUtils {
         InputStream is = new ByteArrayInputStream(bytes);
 
         String mime = tika.detect(bytes);
+
         return supportedMimes.contains(mime) ? mime : null;
     }
 }

@@ -1,5 +1,8 @@
 package com.strautins.CloneGag.model;
 
+import com.strautins.CloneGag.definitions.Roles;
+import org.springframework.security.core.userdetails.User;
+
 import javax.persistence.*;
 import java.math.BigInteger;
 
@@ -15,6 +18,13 @@ public class UserRole {
 
     @Column(name = "role", nullable = false)
     private String role;
+
+    public UserRole() {
+    }
+
+    public UserRole(Roles role) {
+        this.role = role.getRole();
+    }
 
     public BigInteger getId() {
         return id;

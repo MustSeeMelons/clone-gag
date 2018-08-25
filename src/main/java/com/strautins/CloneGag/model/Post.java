@@ -1,8 +1,13 @@
 package com.strautins.CloneGag.model;
 
+import com.strautins.CloneGag.model.validators.ValidImageConstraint;
+import com.strautins.CloneGag.model.validators.ValidTagConstraint;
 import com.strautins.CloneGag.utils.ImageUtils;
+import org.apache.commons.lang.ArrayUtils;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigInteger;
 import java.util.Base64;
 import java.util.Date;
@@ -18,12 +23,16 @@ public class Post {
     @Column(nullable = false)
     private BigInteger owner;
 
+    @NotNull
+    @NotEmpty
     @Column(nullable = false)
     private String title;
 
+    @ValidImageConstraint
     @Column(nullable = false)
-    private byte[] image;
+    private Byte[] image;
 
+    @ValidTagConstraint
     private String tags;
 
     @Column(name = "c_date", nullable = false)
@@ -34,8 +43,8 @@ public class Post {
 
     public String getBase64EncodedImage() {
         if (image != null && image.length > 0) {
-            String mime = ImageUtils.getSupportedMime(image);
-            return "data:" + mime + ";base64, " + Base64.getEncoder().encodeToString(image);
+            String mime = ImageUtils.getSupportedMime(ArrayUtils.toPrimitive(image));
+            return "data:" + mime + ";base64, " + Base64.getEncoder().encodeToString(ArrayUtils.toPrimitive(image));
         }
         return null;
     }
@@ -64,11 +73,11 @@ public class Post {
         this.title = title;
     }
 
-    public byte[] getImage() {
+    public Byte[] getImage() {
         return image;
     }
 
-    public void setImage(byte[] image) {
+    public void setImage(Byte[] image) {
         this.image = image;
     }
 

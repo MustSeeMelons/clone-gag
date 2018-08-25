@@ -13,4 +13,6 @@ public interface UserService {
     Boolean isLoggedIn();
 
     void save(CloneGagUser user);
+
+    Boolean isUsernameTaken(String username);
 }

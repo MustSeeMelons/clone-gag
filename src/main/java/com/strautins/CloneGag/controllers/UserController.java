@@ -1,8 +1,9 @@
 package com.strautins.CloneGag.controllers;
 
 import com.strautins.CloneGag.model.CloneGagUser;
-import com.strautins.CloneGag.model.UserRole;
 import com.strautins.CloneGag.service.UserService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -12,11 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
+
+    private static final Logger LOG = LogManager.getLogger(UserController.class.getName());
 
     @Autowired
     UserService userService;
@@ -33,17 +35,9 @@ public class UserController {
 
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public String register(@ModelAttribute("user") @Valid CloneGagUser user, BindingResult result, ModelMap modelMap) {
-
-        // TODO move this logic into the service
-
-        UserRole role = new UserRole();
-        role.setRole("ROLE_USER");
-
-        role.setUsername(user.getUsername());
-        user.setEnabled(true);
-        user.setRoles(new ArrayList<UserRole>() {{
-            add(role);
-        }});
+        if (result.hasErrors()) {
+            return "register";
+        }
 
         userService.save(user);
 

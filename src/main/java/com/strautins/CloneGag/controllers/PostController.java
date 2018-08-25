@@ -1,15 +1,12 @@
 package com.strautins.CloneGag.controllers;
 
-import com.strautins.CloneGag.exceptions.FeedType;
+import com.strautins.CloneGag.definitions.FeedType;
 import com.strautins.CloneGag.model.Post;
-import com.strautins.CloneGag.security.CloneGagUserDetails;
 import com.strautins.CloneGag.service.PostService;
 import com.strautins.CloneGag.service.UserService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -19,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import javax.jws.WebParam;
+import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
@@ -39,6 +36,7 @@ public class PostController {
 
     @RequestMapping(value = {"", "/", "/{type}"}, method = RequestMethod.GET)
     public String home(@PathVariable(value = "id", required = false) Optional<FeedType> type, ModelMap modelMap) {
+        // TODO use this later to decide
         FeedType feedType = type.isPresent() ? type.get() : FeedType.FRESH;
 
         List<Post> posts = postService.getFresh();
@@ -72,7 +70,12 @@ public class PostController {
      * @return
      */
     @RequestMapping(value = {"/new"}, method = RequestMethod.POST)
-    public String newPost(@ModelAttribute("post") @Validated Post post, BindingResult result, ModelMap modelMap) {
+    public String newPost(@ModelAttribute("post") @Valid Post post, BindingResult result, ModelMap modelMap) {
+
+        if (result.hasErrors()) {
+            return "newPost";
+        }
+
         post.setCreateDate(new Date());
         post.setOwner(userService.getCurrentUserId());
 

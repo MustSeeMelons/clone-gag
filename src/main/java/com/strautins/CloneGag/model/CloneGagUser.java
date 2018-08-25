@@ -1,5 +1,6 @@
 package com.strautins.CloneGag.model;
 
+import com.strautins.CloneGag.model.validators.UniqueUsernameConstraint;
 import com.strautins.CloneGag.security.CloneGagUserDetails;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +24,7 @@ public class CloneGagUser implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
 
+    @UniqueUsernameConstraint
     @NotNull
     @NotEmpty
     @Column(name = "user_name", nullable = false)
@@ -52,6 +54,12 @@ public class CloneGagUser implements Serializable {
                 authorities,
                 id
         );
+    }
+
+    public void addRole(UserRole role) {
+        if (!this.roles.contains(role)) {
+            this.roles.add(role);
+        }
     }
 
     public BigInteger getId() {
@@ -92,15 +100,5 @@ public class CloneGagUser implements Serializable {
 
     public void setRoles(List<UserRole> roles) {
         this.roles = roles;
-    }
-
-    @Override
-    public String toString() {
-        return "CloneGagUser{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", enabled=" + enabled +
-                '}';
     }
 }

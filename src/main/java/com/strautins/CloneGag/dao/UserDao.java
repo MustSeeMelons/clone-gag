@@ -8,4 +8,6 @@ public interface UserDao {
     CloneGagUser getByUserName(String username) throws UsernameNotFoundException;
 
     void saveUser(CloneGagUser user);
+
+    Boolean isUsernameTaken(String username);
 }

@@ -1,7 +1,9 @@
 package com.strautins.CloneGag.service;
 
 import com.strautins.CloneGag.dao.UserDao;
+import com.strautins.CloneGag.definitions.Roles;
 import com.strautins.CloneGag.model.CloneGagUser;
+import com.strautins.CloneGag.model.UserRole;
 import com.strautins.CloneGag.security.CloneGagUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -46,6 +48,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(CloneGagUser user) {
+        UserRole role = new UserRole(Roles.USER);
+        role.setUsername(user.getUsername());
+        user.setEnabled(true);
+        user.addRole(role);
         userDao.saveUser(user);
+    }
+
+    @Override
+    public Boolean isUsernameTaken(String username) {
+        return userDao.isUsernameTaken(username);
     }
 }
