@@ -14,7 +14,6 @@ public class GlobalExceptionHandler {
 
     private void logException(@NotNull Exception e) {
         LOG.error("GlobalExceptionHandler: " + e.getMessage(), e);
-        e.printStackTrace();
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
