@@ -2,6 +2,7 @@ package com.strautins.CloneGag.configuration;
 
 import com.strautins.CloneGag.converter.MultipartFileToByteArrayConverter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -10,6 +11,7 @@ import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
+import org.springframework.validation.beanvalidation.SpringConstraintValidatorFactory;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
@@ -23,6 +25,9 @@ public class CloneGagConfiguration extends WebMvcConfigurerAdapter {
 
     @Autowired
     MultipartFileToByteArrayConverter multipartFileToByteArrayConverter;
+
+    @Autowired
+    private AutowireCapableBeanFactory autowireCapableBeanFactory;
 
     @Override
     public void configureViewResolvers(ViewResolverRegistry registry) {
@@ -48,6 +53,12 @@ public class CloneGagConfiguration extends WebMvcConfigurerAdapter {
         ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
         messageSource.setBasename("messages");
         return messageSource;
+    }
+
+    @Bean
+    public SpringConstraintValidatorFactory springConstraintValidatorFactory() {
+        return new SpringConstraintValidatorFactory(autowireCapableBeanFactory);
+
     }
 
     @Override

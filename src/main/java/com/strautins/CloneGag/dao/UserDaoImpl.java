@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
+
 @Repository
 public class UserDaoImpl implements UserDao {
 
@@ -35,8 +37,12 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Boolean isUsernameTaken(String username) {
-        return sessionFactory.getCurrentSession()
-                .createQuery("from CloneGagUser c where c.username =:username")
-                .setParameter("username", username).getSingleResult() != null;
+        try {
+            return sessionFactory.getCurrentSession()
+                    .createQuery("from CloneGagUser c where c.username =:username")
+                    .setParameter("username", username).getSingleResult() != null;
+        } catch (NoResultException e) {
+            return false;
+        }
     }
 }

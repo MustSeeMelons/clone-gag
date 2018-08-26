@@ -24,7 +24,7 @@ public class CloneGagUser implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
 
-    @UniqueUsernameConstraint
+    // @UniqueUsernameConstraint
     @NotNull
     @NotEmpty
     @Column(name = "user_name", nullable = false)

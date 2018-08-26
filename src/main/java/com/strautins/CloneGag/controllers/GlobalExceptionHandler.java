@@ -13,7 +13,8 @@ public class GlobalExceptionHandler {
     private static final Logger LOG = LogManager.getLogger(GlobalExceptionHandler.class.getName());
 
     private void logException(@NotNull Exception e) {
-        LOG.debug("GlobalExceptionHandler: " + e.getMessage());
+        LOG.error("GlobalExceptionHandler: " + e.getMessage(), e);
+        e.printStackTrace();
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
