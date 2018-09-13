@@ -6,6 +6,7 @@ import com.strautins.CloneGag.exceptions.ExceptionManager;
 import com.strautins.CloneGag.exceptions.RestException;
 import com.strautins.CloneGag.model.Post;
 import com.strautins.CloneGag.model.Vote;
+import com.strautins.CloneGag.pojo.PostResponse;
 import com.strautins.CloneGag.pojo.VoteResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 
 @Service("voteService")
 @Transactional
@@ -71,4 +73,15 @@ public class VoteServiceImpl implements VoteService {
 
         return new VoteResponse(postId, post.getPoints());
     }
+
+    @Override
+    public List<PostResponse> getUpVotedPosts(BigInteger userId, BigInteger page) throws RestException {
+        List<PostResponse> posts = voteDao.getUpVotes(userId, page);
+
+        LOG.debug(posts);
+
+        return posts;
+    }
+
+
 }

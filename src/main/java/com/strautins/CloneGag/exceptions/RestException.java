@@ -17,9 +17,10 @@ public class RestException extends Exception {
         this.e = e;
     }
 
-    public RestException(Exception e, String message) {
+    public RestException(int code, String message, Exception e) {
         super(message);
         this.e = e;
+        this.code = code;
     }
 
     public Exception getE() {

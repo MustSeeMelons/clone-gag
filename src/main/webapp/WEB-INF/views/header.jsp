@@ -24,6 +24,7 @@
                         <a class="nav-item nav-link" href="/cloneGag/post">Home</a>
                         <a class="nav-item nav-link" href="/cloneGag/post/new">Upload</a>
                         <a class="nav-item nav-link" href="/cloneGag/post/list">My Funnies</a>
+                        <a class="nav-item nav-link" href="/cloneGag/post/upvotes">My Upvotes</a>
                         <c:choose>
                             <c:when test="${isLoggedIn == true}">
                                 <a class="nav-item nav-link navbar-text" href="/cloneGag/logout">Logout</a>

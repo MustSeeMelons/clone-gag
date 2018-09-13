@@ -10,6 +10,7 @@ public class PostResponse {
     private String title;
     private String image;
     private BigInteger points;
+    private String tags;
 
     public PostResponse(Post post) {
         this.id = post.getId();
@@ -17,6 +18,7 @@ public class PostResponse {
         this.title = post.getTitle();
         this.image = post.getBase64EncodedImage();
         this.points = post.getPoints();
+        this.tags = post.getTags();
     }
 
     public BigInteger getId() {
@@ -57,5 +59,13 @@ public class PostResponse {
 
     public void setPoints(BigInteger points) {
         this.points = points;
+    }
+
+    public String getTags() {
+        return tags;
+    }
+
+    public void setTags(String tags) {
+        this.tags = tags;
     }
 }

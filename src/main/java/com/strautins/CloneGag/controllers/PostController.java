@@ -1,8 +1,10 @@
 package com.strautins.CloneGag.controllers;
 
 import com.strautins.CloneGag.definitions.FeedType;
+import com.strautins.CloneGag.exceptions.ExceptionManager;
 import com.strautins.CloneGag.exceptions.RestException;
 import com.strautins.CloneGag.model.Post;
+import com.strautins.CloneGag.pojo.PostResponse;
 import com.strautins.CloneGag.pojo.VoteResponse;
 import com.strautins.CloneGag.service.PostService;
 import com.strautins.CloneGag.service.UserService;
@@ -10,6 +12,7 @@ import com.strautins.CloneGag.service.VoteService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -128,16 +131,61 @@ public class PostController {
         return "listPosts";
     }
 
+    @RequestMapping(value = "/upvotes", method = RequestMethod.GET)
+    public String myUpvotes(ModelMap modelMap) {
+        modelMap.addAttribute("userId", userService.getCurrentUserId());
+        return "upvotedStream";
+    }
+
+    @RequestMapping(value = "/upvotes/{userId}", method = RequestMethod.GET)
+    public String userUpvotes(@PathVariable("userId") BigInteger userId, ModelMap modelMap) {
+        modelMap.addAttribute("userId", userId);
+        return "upvotedStream";
+    }
+
     // TODO separate rest endpoints from view ones?
     @RequestMapping(value = "/vote/{id}/{point}", method = RequestMethod.GET)
     @ResponseBody
     public VoteResponse vote(
             @PathVariable(value = "id") BigInteger postId,
             @PathVariable(value = "point") Integer point) throws RestException {
-        LOG.debug("PostController: postId: %s, point: %s", postId, point);
-        return voteService.vote(postId, point);
+        try {
+            return voteService.vote(postId, point);
+        } catch (Exception e) {
+            throw ExceptionManager.InternalError(e);
+        }
     }
 
+    @RequestMapping(value = "/votes/{userId}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PostResponse> getUpVotedPostsStart(
+            @PathVariable(value = "userId", required = false) BigInteger userId
+    ) throws RestException {
+        try {
+            return handleUpVoteStream(userId, BigInteger.ZERO);
+        } catch (Exception e) {
+            throw ExceptionManager.InternalError(e);
+        }
+    }
 
+    @RequestMapping(value = "/votes/{userId}/{page}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<PostResponse> getUpvotedPostsContinue(
+            @PathVariable(value = "userId", required = false) BigInteger userId,
+            @PathVariable(value = "page", required = false) BigInteger page
+    ) throws RestException {
+        try {
+            return handleUpVoteStream(userId, page);
+        } catch (Exception e) {
+            throw ExceptionManager.InternalError(e);
+        }
+    }
+
+    private List<PostResponse> handleUpVoteStream(BigInteger userId, BigInteger page) throws RestException {
+        if (userId == null) {
+            userId = userService.getCurrentUserId();
+        }
+        return voteService.getUpVotedPosts(userId, page);
+    }
 
 }
