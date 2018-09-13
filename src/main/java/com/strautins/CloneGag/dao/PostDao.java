@@ -10,6 +10,8 @@ public interface PostDao {
 
     Post loadPost(BigInteger id);
 
+    void updatePost(Post post);
+
     List<Post> getUserPosts(BigInteger userId);
 
     List<Post> getFresh();

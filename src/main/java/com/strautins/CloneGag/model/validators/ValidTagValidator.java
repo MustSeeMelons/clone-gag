@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 public class ValidTagValidator implements ConstraintValidator<ValidTagConstraint, String> {
 
-    private Pattern pattern = Pattern.compile("(\\s?(\"[\\w\\s]*\"|\\d*)\\s?(,|$))");
+    private Pattern pattern = Pattern.compile("^.+(,.+)*$");
 
     @Override
     public void initialize(ValidTagConstraint constraintAnnotation) {

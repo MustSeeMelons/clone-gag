@@ -28,7 +28,7 @@
             </div>
             <div class="form-group">
                 <label for="tags">Tags:</label>
-                <form:input type="text" class="form-control" path="tags" id="tags" placeholder="Useless tags"/>
+                <form:input type="text" class="form-control" path="tags" id="tags" placeholder="tag one, tag two, tag your it"/>
                 <div class="has-error">
                     <form:errors path="tags" class="help-inline text-danger"/>
                 </div>

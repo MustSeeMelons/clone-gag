@@ -35,8 +35,16 @@ CREATE TABLE gag.POSTS(
     title varchar(30) NOT NULL,
     image bytea NOT NULL,
     tags text,
+    points bigint NOT NULL,
     c_date TIMESTAMP NOT NULL,
     m_date TIMESTAMP
+);
+
+CREATE TABLE gag.VOTES(
+    id SERIAL PRIMARY KEY,
+    owner bigint REFERENCES gag.USERS(id),
+    post_id bigint REFERENCES gag.POSTS(id),
+    point SMALLINT NOT NULL
 );
 
 -- Permisions to schema and tables

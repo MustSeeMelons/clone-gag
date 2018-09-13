@@ -1,9 +1,12 @@
 package com.strautins.CloneGag.controllers;
 
 import com.strautins.CloneGag.definitions.FeedType;
+import com.strautins.CloneGag.exceptions.RestException;
 import com.strautins.CloneGag.model.Post;
+import com.strautins.CloneGag.pojo.VoteResponse;
 import com.strautins.CloneGag.service.PostService;
 import com.strautins.CloneGag.service.UserService;
+import com.strautins.CloneGag.service.VoteService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +14,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
+import javax.jws.WebParam;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.Date;
@@ -34,8 +35,11 @@ public class PostController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = {"", "/", "/{type}"}, method = RequestMethod.GET)
-    public String home(@PathVariable(value = "id", required = false) Optional<FeedType> type, ModelMap modelMap) {
+    @Autowired
+    private VoteService voteService;
+
+    @RequestMapping(value = {"", "/", "/feed/{type}"}, method = RequestMethod.GET)
+    public String home(@PathVariable(value = "type", required = false) Optional<FeedType> type, ModelMap modelMap) {
         // TODO use this later to decide
         FeedType feedType = type.isPresent() ? type.get() : FeedType.FRESH;
 
@@ -123,4 +127,17 @@ public class PostController {
 
         return "listPosts";
     }
+
+    // TODO separate rest endpoints from view ones?
+    @RequestMapping(value = "/vote/{id}/{point}", method = RequestMethod.GET)
+    @ResponseBody
+    public VoteResponse vote(
+            @PathVariable(value = "id") BigInteger postId,
+            @PathVariable(value = "point") Integer point) throws RestException {
+        LOG.debug("PostController: postId: %s, point: %s", postId, point);
+        return voteService.vote(postId, point);
+    }
+
+
+
 }

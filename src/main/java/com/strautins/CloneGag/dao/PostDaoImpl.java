@@ -5,6 +5,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import java.math.BigInteger;
 import java.util.List;
 
@@ -21,7 +22,15 @@ public class PostDaoImpl implements PostDao {
 
     @Override
     public Post loadPost(BigInteger id) {
-        return sessionFactory.getCurrentSession().get(Post.class, id);
+        try {
+            return sessionFactory.getCurrentSession().get(Post.class, id);
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public void updatePost(Post post) {
+        sessionFactory.getCurrentSession().update(post);
     }
 
     // TODO pagination for this

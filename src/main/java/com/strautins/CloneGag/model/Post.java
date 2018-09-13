@@ -1,5 +1,6 @@
 package com.strautins.CloneGag.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.strautins.CloneGag.model.validators.ValidImageConstraint;
 import com.strautins.CloneGag.model.validators.ValidTagConstraint;
 import com.strautins.CloneGag.utils.ImageUtils;
@@ -41,12 +42,26 @@ public class Post {
     @Column(name = "m_date")
     private Date modifiedDate;
 
+    private BigInteger points = BigInteger.ZERO;
+
+    public void modifyPoints(Integer value) {
+        points = points.add(BigInteger.valueOf(value));
+    }
+
     public String getBase64EncodedImage() {
         if (image != null && image.length > 0) {
             String mime = ImageUtils.getSupportedMime(ArrayUtils.toPrimitive(image));
             return "data:" + mime + ";base64, " + Base64.getEncoder().encodeToString(ArrayUtils.toPrimitive(image));
         }
         return null;
+    }
+
+    public BigInteger getPoints() {
+        return points;
+    }
+
+    public void setPoints(BigInteger points) {
+        this.points = points;
     }
 
     public BigInteger getId() {
