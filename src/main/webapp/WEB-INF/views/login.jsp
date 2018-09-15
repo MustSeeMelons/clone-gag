@@ -21,7 +21,7 @@
             <div class="row">
             <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <p class="lead">Login you pleb.</p>
+                    <p class="lead">Login you pleb. <a class="text-dark" href="/cloneGag/user/register">Or Register.</a></p>
                     <c:if test="${param.logout != null}">
                         <div class="text-center bg-success">
                             <p>You have been logged out successfully.</p>
@@ -39,12 +39,12 @@
                             <small id="passwordHelp" class="form-text text-muted">It better be good.</small>
                         </div>
                         <c:if test="${param.error != null}">
-                            <div class="text-center bg-danger">
+                            <div class="text-center text-danger">
                                 <p>Invalid username and/or password.</p>
                             </div>
                         </c:if>
                         <input class="btn btn-primary btn-sm" type="submit" value="Login"/>
-                        <a href="/cloneGag/post"><button class="btn btn-danger btn-sm">Cancel</button></a>
+                        <a href="/cloneGag/post"><button type="button" class="btn btn-danger btn-sm">Cancel</button></a>
                     </form>
                 </div>
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>

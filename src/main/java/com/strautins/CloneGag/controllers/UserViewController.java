@@ -9,19 +9,17 @@ import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
-import java.util.Locale;
 
 @Controller
 @RequestMapping("/user")
-public class UserController {
+public class UserViewController {
 
-    private static final Logger LOG = LogManager.getLogger(UserController.class.getName());
+    private static final Logger LOG = LogManager.getLogger(UserViewController.class.getName());
 
     @Autowired
     UserService userService;

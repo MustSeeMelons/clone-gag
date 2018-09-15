@@ -28,11 +28,14 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * View endpoint for returning pages regarding posts.
+ */
 @Controller
 @RequestMapping("/post")
-public class PostController {
+public class PostViewController {
 
-    private static final Logger LOG = LogManager.getLogger(PostController.class.getName());
+    private static final Logger LOG = LogManager.getLogger(PostViewController.class.getName());
 
     @Autowired
     private PostService postService;
@@ -52,7 +55,7 @@ public class PostController {
      * @return
      */
     @RequestMapping(value = {"", "/", "/feed/{type}"}, method = RequestMethod.GET)
-    public String getPostFeed(@PathVariable(value = "type", required = false) Optional<FeedType> type, ModelMap modelMap) {
+    public String postFeed(@PathVariable(value = "type", required = false) Optional<FeedType> type, ModelMap modelMap) {
         FeedType feedType = type.isPresent() ? type.get() : FeedType.FRESH;
 
         modelMap.addAttribute("pageTitle", "See what the cat dragged in");
@@ -63,11 +66,8 @@ public class PostController {
     }
 
     /**
-     * Returns the new post jsp.
-     * User must be logged in.
-     */
-    /**
      * Returns the new post creation menu.
+     * User must be logged in.
      *
      * @param modelMap
      * @return
@@ -83,16 +83,12 @@ public class PostController {
 
     /**
      * Handles new post upload.
-     */
-    /**
-     * Saves a post in the database.
      *
      * @param modelMap
      * @return
      */
     @RequestMapping(value = {"/new"}, method = RequestMethod.POST)
     public String newPost(@ModelAttribute("post") @Valid Post post, BindingResult result, ModelMap modelMap) {
-
         if (result.hasErrors()) {
             return "newPost";
         }
@@ -113,9 +109,7 @@ public class PostController {
 
     /**
      * Returns the view post jsp.
-     */
-    /**
-     * View a single post by id.
+     * User does not have to be logged in.
      *
      * @param id
      * @param modelMap
@@ -154,7 +148,7 @@ public class PostController {
 
     /**
      * Returns the up vote stream jsp.
-     * User must be logged in.
+     * User must be logged in, as its for the current user.
      *
      * @param modelMap
      * @return
@@ -162,12 +156,13 @@ public class PostController {
     @RequestMapping(value = "/upvotes", method = RequestMethod.GET)
     public String myUpvotes(ModelMap modelMap) {
         modelMap.addAttribute("userId", userService.getCurrentUserId());
+        modelMap.addAttribute("isLoggedIn", userService.isLoggedIn());
         return "upvotedStream";
     }
 
     /**
      * Returns the up vote stream jsp.
-     * User must be logged in.
+     * User does not have to be logged in, as its for a specific user.
      *
      * @param modelMap
      * @return
@@ -175,99 +170,7 @@ public class PostController {
     @RequestMapping(value = "/upvotes/{userId}", method = RequestMethod.GET)
     public String userUpvotes(@PathVariable("userId") BigInteger userId, ModelMap modelMap) {
         modelMap.addAttribute("userId", userId);
+        modelMap.addAttribute("isLoggedIn", userService.isLoggedIn());
         return "upvotedStream";
     }
-
-    /**
-     * REST endpoint for voting on posts.
-     *
-     * @param postId
-     * @param point
-     * @return
-     * @throws RestException
-     */
-    @RequestMapping(value = "/vote/{id}/{point}", method = RequestMethod.GET)
-    @ResponseBody
-    public VoteResponse vote(
-            @PathVariable(value = "id") BigInteger postId,
-            @PathVariable(value = "point") Integer point) throws RestException {
-        try {
-            return voteService.vote(postId, point);
-        } catch (Exception e) {
-            throw ExceptionManager.InternalError(e);
-        }
-    }
-
-    /**
-     * Returns user up voted posts for a user, select pages.
-     *
-     * @param userId
-     * @param page
-     * @return
-     * @throws RestException
-     */
-    @RequestMapping(value = "/votes/{userId}/{page}", method = RequestMethod.GET)
-    @ResponseBody
-    public List<PostResponse> getUpVotedPostStream(
-            @PathVariable(value = "userId", required = false) BigInteger userId,
-            @PathVariable(value = "page", required = false) BigInteger page
-    ) throws RestException {
-        try {
-            return handleUpVoteStream(userId, page);
-        } catch (Exception e) {
-            throw ExceptionManager.InternalError(e);
-        }
-    }
-
-    private List<PostResponse> handleUpVoteStream(BigInteger userId, BigInteger page) throws RestException {
-        if (userId == null) {
-            userId = userService.getCurrentUserId();
-        }
-        return voteService.getUpVotedPosts(userId, page);
-    }
-
-    /**
-     * Returns a selected page of posts depending on the feed type.
-     *
-     * @param type
-     * @return
-     * @throws RestException
-     */
-    @RequestMapping(value = "/feedStream/{type}/{page}", method = RequestMethod.GET)
-    @ResponseBody
-    public List<PostResponse> getPostFeedStream(
-            @PathVariable("type") FeedType type,
-            @PathVariable("page") BigInteger page
-    ) throws RestException {
-        try {
-            return handleFeedStream(type, page);
-        } catch (Exception e) {
-            throw ExceptionManager.InternalError(e);
-        }
-    }
-
-    public List<PostResponse> handleFeedStream(FeedType type, BigInteger page) throws RestException {
-        return postService.getFeed(type, page);
-    }
-
-    /**
-     * Returns paginated user posts.
-     *
-     * @return
-     * @throws RestException
-     */
-    @RequestMapping(value = "/{userId}/{page}", method = RequestMethod.GET)
-    @ResponseBody
-    public PostPage getUserPostPages(
-            @PathVariable(value = "userId", required = false) BigInteger userId,
-            @PathVariable("page") BigInteger page
-    ) throws RestException {
-        try {
-            return postService.getUserPosts(userId, page);
-        } catch (Exception e) {
-            throw ExceptionManager.InternalError(e);
-        }
-    }
-
-
 }

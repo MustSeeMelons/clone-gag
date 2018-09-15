@@ -22,7 +22,7 @@
             <div class="row">
             <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
                 <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-6">
-                    <p class="lead">Register you pleb.</p>
+                    <p class="lead">Register you pleb. <a class="text-dark" href="/cloneGag/login">Or Login.</a></p>
                     <c:if test="${errors}">
                         <c:forEach items="${errors}" var="e">
                             <span>e</span>
@@ -46,7 +46,7 @@
                             </div>
                         </div>
                         <input class="btn btn-primary btn-sm" type="submit" value="Register"/>
-                        <a href="/cloneGag/post"><button class="btn btn-danger btn-sm">Cancel</button></a>
+                        <a href="/cloneGag/post"><button type="button" class="btn btn-danger btn-sm">Cancel</button></a>
                     </form:form>
                 </div>
                 <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>

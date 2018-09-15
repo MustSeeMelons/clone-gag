@@ -34,7 +34,7 @@
                 </div>
             </div>
             <input class="btn btn-primary btn-sm" type="submit" value="Upload"/>
-            <a href="/cloneGag/post"><button class="btn btn-danger btn-sm">Cancel</button></a>
+            <a href="/cloneGag/post"><button type="button" class="btn btn-danger btn-sm">Cancel</button></a>
         </form:form>
     </div>
     <div class="col-3 col-sm-3 col-md-3 col-lg-3 col-xl-3"></div>
