@@ -164,13 +164,19 @@
     </dependencies>
     <profiles>
         <profile>
-            <id>local</id>
+            <id>docker-local</id>
             <properties>
-                <build.profile.id>local</build.profile.id>
+                <build.profile.id>docker-local</build.profile.id>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
+        </profile>
+        <profile>
+            <id>docker-dev</id>
+            <properties>
+                <build.profile.id>docker-dev</build.profile.id>
+            </properties>
         </profile>
         <profile>
             <id>dev</id>

@@ -30,8 +30,8 @@ public class ExceptionManager {
         throw new RestException(ErrorCodes.NO_USER.getCode(), "User is not logged in.");
     }
 
-    public static void DBError(Exception e) throws RestException {
-        throw new RestException(ErrorCodes.DB_ERROR.getCode(), "Database error.", e);
+    public static RestException DBError(Exception e) {
+        return new RestException(ErrorCodes.DB_ERROR.getCode(), "Database error.", e);
     }
 
     public static RestException InternalError(Exception e) {

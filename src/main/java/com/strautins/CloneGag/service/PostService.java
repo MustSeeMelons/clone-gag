@@ -1,6 +1,10 @@
 package com.strautins.CloneGag.service;
 
+import com.strautins.CloneGag.definitions.FeedType;
+import com.strautins.CloneGag.exceptions.RestException;
 import com.strautins.CloneGag.model.Post;
+import com.strautins.CloneGag.pojo.PostPage;
+import com.strautins.CloneGag.pojo.PostResponse;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -10,11 +14,7 @@ public interface PostService {
 
     Post loadPost(BigInteger id);
 
-    List<Post> getUserPosts(BigInteger userId);
+    PostPage getUserPosts(BigInteger userId, BigInteger page) throws RestException;
 
-    List<Post> getFresh();
-
-    List<Post> getTrending();
-
-    List<Post> getHot();
+    public List<PostResponse> getFeed(FeedType type, BigInteger page) throws RestException;
 }

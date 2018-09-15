@@ -6,55 +6,127 @@
     <div class="row">
         <div class="col-2 col-sm-2 col-md-3 col-lg-3 col-xl-3"></div>
             <div class="col-8 col-sm-8 col-md-6 col-lg-6 col-xl-6">
-                <div>
-                    <c:forEach items="${posts}" var="post">
-                        <div class="card mx-auto m-5">
-                            <div class="card-header">
-                                ${post.getTitle()}
-                            </div>
-                            <div class="card-body">
-                                <img class="img-fluid" src="${post.getBase64EncodedImage()}"/>
-                            </div>
-                             <div class="card-footer text-muted">
-                                <div class="row">
-                                    <div class="col text-left">
-                                        <button id="up-${post.getId()}" type="button" class="btn btn-default">
-                                            <span class="fa fa-angle-up"></span>
-                                        </button>
-                                        <span id="point-${post.getId()}">${post.getPoints()}</span>
-                                        <button id="down-${post.getId()}" type="button" class="btn btn-default">
-                                            <span class="fa fa-angle-down"></span>
-                                        </button>
-                                    </div>
-                                    <div class="col text-right">
-                                        ${post.getTags()}
-                                    </div>
-                                </div>
-                             </div>
-                        </div>
-                    </c:forEach>
+                <nav id="top-nav">
+                </nav>
+                <div id="main">
                 </div>
+                <nav id="nav">
+                    <ul id="page-nav" class="pagination justify-content-center">
+
+                    </ul>
+                </nav>
             </div>
         <div class="col-2 col-sm-2 col-md-3 col-lg-3 col-xl-3"></div>
     </div>
     <script>
-        let ups = document.querySelectorAll("button[id^=up-]");
-        let downs = document.querySelectorAll("button[id^=down-]");
+        let page = 0;
+        let polling = false;
+        const loadPosts = () => {
+            const userId = ${userId};
+            polling = true;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    if(JSON.parse(this.responseText).posts.length !== 0){
+                        page++;
+                        polling = false;
+                        const main = document.getElementById("main");
 
-        for(let i=0;i<ups.length;i++){
-            ups[i].addEventListener("click", () => {
-                let index = ups[i].id.indexOf("-");
-                let postId = ups[i].id.substring(index + 1);
-                vote(postId, 1);
-            });
-        }
+                        const response = JSON.parse(this.responseText);
 
-        for(let i=0;i<downs.length;i++){
-            downs[i].addEventListener("click", () => {
-                let index = downs[i].id.indexOf("-");
-                let postId = downs[i].id.substring(index + 1);
-                vote(postId, -1);
-            });
-        }
+                        let posts;
+                        try {
+                            posts = response.posts;
+                        } catch {
+                            polling = true;
+                            return;
+                        }
+
+                        while (main.lastChild) {
+                            main.removeChild(main.lastChild);
+                        }
+
+                        posts.forEach((post) => {
+                            const node = document.getElementById("post-node").cloneNode(true);
+                            node.id = "";
+                            node.style.display = "block";
+                            node.querySelector("#title").textContent  = post.title;
+                            node.querySelector("#image").src = post.image;
+                            node.querySelector("#tags").textContent  = post.tags;
+                            node.querySelector("#point").textContent  = post.points;
+
+                            node.querySelector("#point").id += "-" + post.id;
+
+                            node.querySelector("#up").addEventListener("click", () => {
+                                vote(post.id, 1);
+                            });
+
+                            node.querySelector("#down").addEventListener("click", () => {
+                                vote(post.id, -1);
+                            });
+
+                            main.appendChild(node);
+                        });
+
+                        if(posts.length > 0) {
+                            let pageNav = document.getElementById("page-nav");
+                            while (pageNav.lastChild) {
+                                pageNav.removeChild(pageNav.lastChild);
+                            }
+                            for(let i = 0; i < response.pageCount; i++) {
+                                const node = document.getElementById("page-node").cloneNode(true);
+                                node.id = "";
+                                node.style.display = "flex";
+                                node.querySelector("#page-link").textContent = i + 1;
+                                if(response.currentPage == i) {
+                                    node.classList.add("active");
+                                } else {
+                                    node.addEventListener("click", () => {
+                                        page = i;
+                                        loadPosts();
+                                    });
+                                }
+                                pageNav.appendChild(node);
+                            }
+
+                            document.getElementById("top-nav").appendChild(pageNav);
+                        }
+                        window.scrollTo(0,0)
+                    } else {
+                        polling = true;
+                    }
+                }
+            };
+
+            xhttp.open("GET", "${app.host}/post/${userId}/" + page, true);
+            xhttp.send();
+        };
+
+        loadPosts();
     </script>
+    <li id="page-node" class="page-item" style="display: none"><a id="page-link" class="page-link"></a></li>
+    <div id="post-node" class="card mx-auto m-5" style="display: none">
+        <div id="title" class="card-header">
+
+        </div>
+        <div class="card-body">
+            <img id="image" class="img-fluid"/>
+        </div>
+         <div class="card-footer text-muted">
+            <div class="row">
+                <div class="col text-left">
+                    <button id="up" type="button" class="btn btn-default">
+                        <span class="fa fa-angle-up"></span>
+                    </button>
+                    <span id="point"></span>
+                    <button id="down" type="button" class="btn btn-default">
+                        <span class="fa fa-angle-down"></span>
+                    </button>
+                </div>
+                <div id="tags" class="col text-right">
+
+                </div>
+            </div>
+         </div>
+    </div>
 <jsp:include page="footer.jsp" />

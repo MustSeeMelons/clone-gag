@@ -55,7 +55,7 @@ public class VoteDaoImpl implements VoteDao {
     @Override
     public List<PostResponse> getUpVotes(BigInteger userId, BigInteger page) throws RestException {
         String hql = "from Post p where p.owner = :userId and p.id " +
-                "in (select postId from Vote v where v.owner = :userId and v.point > 0) order by p.createDate";
+                "in (select postId from Vote v where v.owner = :userId and v.point > 0) order by p.createDate DESC";
         try {
             List<Post> posts = (List<Post>) sessionFactory.getCurrentSession().createQuery(hql)
                     .setParameter("userId", userId)
@@ -71,8 +71,9 @@ public class VoteDaoImpl implements VoteDao {
                     new PostResponse(post)
             ).collect(Collectors.toList());
         } catch (NoResultException e) {
-            ExceptionManager.DBError(e);
+            return new ArrayList<>();
+        } catch (Exception e) {
+            throw ExceptionManager.DBError(e);
         }
-        return new ArrayList<>();
     }
 }

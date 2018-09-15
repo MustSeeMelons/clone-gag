@@ -5,8 +5,9 @@
 <jsp:include page="header.jsp" />
     <div class="row">
         <div class="col-2 col-sm-2 col-md-3 col-lg-3 col-xl-3"></div>
-        <div id="main" class="col-8 col-sm-8 col-md-6 col-lg-6 col-xl-6">
-        </div>
+            <div id="main" class="col-8 col-sm-8 col-md-6 col-lg-6 col-xl-6">
+
+            </div>
         <div class="col-2 col-sm-2 col-md-3 col-lg-3 col-xl-3"></div>
     </div>
     <script>
@@ -58,7 +59,7 @@
                 }
             };
 
-            xhttp.open("GET", "${app.host}/post/votes/" + ${userId} + "/" + page, true);
+            xhttp.open("GET", "${app.host}/post/feedStream/${feedType}/" + page, true);
             xhttp.send();
         };
 
