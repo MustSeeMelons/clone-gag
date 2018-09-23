@@ -9,6 +9,11 @@ public class ErrorResponse {
     private String message;
     private int code;
 
+    public ErrorResponse(String message, int code) {
+        this.message = message;
+        this.code = code;
+    }
+
     public ErrorResponse(RestException e) {
         this.message = e.getMessage();
         this.code = e.getCode();

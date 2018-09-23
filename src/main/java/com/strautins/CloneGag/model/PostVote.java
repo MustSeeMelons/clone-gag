@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.math.BigInteger;
 
 @Entity
-@Table(name = "VOTES", schema = "gag")
-public class Vote {
+@Table(name = "POST_VOTES", schema = "gag")
+public class PostVote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;

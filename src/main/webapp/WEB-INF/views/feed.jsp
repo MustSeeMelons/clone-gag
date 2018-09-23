@@ -50,6 +50,10 @@
                                 vote(post.id, -1);
                             });
 
+                            node.querySelector("#comment").addEventListener("click", () => {
+                                redirectToPost(post.id);
+                            });
+
                             main.appendChild(node);
                         });
                     } else {

@@ -1,32 +1,22 @@
 package com.strautins.CloneGag.controllers;
 
 import com.strautins.CloneGag.definitions.FeedType;
-import com.strautins.CloneGag.exceptions.ExceptionManager;
-import com.strautins.CloneGag.exceptions.RestException;
 import com.strautins.CloneGag.model.Post;
-import com.strautins.CloneGag.pojo.PostPage;
-import com.strautins.CloneGag.pojo.PostResponse;
-import com.strautins.CloneGag.pojo.VoteResponse;
 import com.strautins.CloneGag.service.PostService;
 import com.strautins.CloneGag.service.UserService;
 import com.strautins.CloneGag.service.VoteService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.method.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.jws.WebParam;
 import javax.validation.Valid;
 import java.math.BigInteger;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * View endpoint for returning pages regarding posts.
@@ -121,6 +111,7 @@ public class PostViewController {
 
         Post post = postService.loadPost(id);
 
+        modelMap.addAttribute("postId", post.getId());
         modelMap.addAttribute("title", post.getTitle());
         modelMap.addAttribute("tags", post.getTags());
         modelMap.addAttribute("image", post.getBase64EncodedImage());

@@ -5,7 +5,8 @@ package com.strautins.CloneGag.exceptions;
  */
 public class ExceptionManager {
 
-    public enum ErrorCodes {
+    public enum ProcessCodes {
+        OK(200),
         POST_NOT_FOUND(600),
         NO_USER(601),
         DB_ERROR(700),
@@ -13,7 +14,7 @@ public class ExceptionManager {
 
         private int code;
 
-        ErrorCodes(int code) {
+        ProcessCodes(int code) {
             this.code = code;
         }
 
@@ -21,21 +22,4 @@ public class ExceptionManager {
             return code;
         }
     }
-
-    public static void PostNotFoundException() throws RestException {
-        throw new RestException(ErrorCodes.POST_NOT_FOUND.getCode(), "Post not found.");
-    }
-
-    public static void NoUserException() throws RestException {
-        throw new RestException(ErrorCodes.NO_USER.getCode(), "User is not logged in.");
-    }
-
-    public static RestException DBError(Exception e) {
-        return new RestException(ErrorCodes.DB_ERROR.getCode(), "Database error.", e);
-    }
-
-    public static RestException InternalError(Exception e) {
-        return new RestException(ErrorCodes.INTERNAL_ERROR.getCode(), "Internal error.", e);
-    }
-
 }

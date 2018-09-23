@@ -1,13 +1,13 @@
 package com.strautins.CloneGag.service;
 
 import com.strautins.CloneGag.dao.PostDao;
-import com.strautins.CloneGag.dao.VoteDao;
+import com.strautins.CloneGag.dao.PostVoteDao;
 import com.strautins.CloneGag.exceptions.ExceptionManager;
 import com.strautins.CloneGag.exceptions.RestException;
 import com.strautins.CloneGag.model.Post;
-import com.strautins.CloneGag.model.Vote;
+import com.strautins.CloneGag.model.PostVote;
 import com.strautins.CloneGag.pojo.PostResponse;
-import com.strautins.CloneGag.pojo.VoteResponse;
+import com.strautins.CloneGag.pojo.PostVoteResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class VoteServiceImpl implements VoteService {
     private static final Logger LOG = LogManager.getLogger(VoteServiceImpl.class.getName());
 
     @Autowired
-    private VoteDao voteDao;
+    private PostVoteDao postVoteDao;
 
     @Autowired
     private PostDao postDao;
@@ -34,49 +34,50 @@ public class VoteServiceImpl implements VoteService {
     private UserService userService;
 
     @Override
-    public VoteResponse vote(BigInteger postId, Integer point) throws RestException {
+    public PostVoteResponse vote(BigInteger postId, Integer point) {
         BigInteger userId = userService.getCurrentUserId();
         if (userId == null) {
-            ExceptionManager.NoUserException();
+//            ExceptionManager.NoUserException();
         }
-        Vote vote = voteDao.loadVote(postId, userId);
+
+        PostVote postVote = postVoteDao.loadVote(postId, userId);
         Post post = postDao.loadPost(postId);
 
         if (post == null) {
-            ExceptionManager.PostNotFoundException();
+//            ExceptionManager.PostNotFoundException();
         }
 
-        // If we don't have a vote, simply create one with the appropriate points
-        if (vote == null) {
-            Vote newVote = new Vote();
-            newVote.setOwner(userId);
-            newVote.setPostId(postId);
-            newVote.setPoint(point);
+        // If we don't have a postVote, simply create one with the appropriate points
+        if (postVote == null) {
+            PostVote newPostVote = new PostVote();
+            newPostVote.setOwner(userId);
+            newPostVote.setPostId(postId);
+            newPostVote.setPoint(point);
 
-            voteDao.saveVote(newVote);
+            postVoteDao.saveVote(newPostVote);
             post.modifyPoints(point);
         } else {
-            // Undo vote
-            if (vote.getPoint() == point) {
-                voteDao.deleteVote(vote);
+            // Undo postVote
+            if (postVote.getPoint() == point) {
+                postVoteDao.deleteVote(postVote);
                 post.modifyPoints(-point);
             } else {
-                // Change vote type
-                post.modifyPoints(-vote.getPoint() * 2);
-                vote.setPoint(point);
-                voteDao.updateVote(vote);
+                // Change postVote type
+                post.modifyPoints(-postVote.getPoint() * 2);
+                postVote.setPoint(point);
+                postVoteDao.updateVote(postVote);
             }
         }
 
         post.setModifiedDate(new Date());
         postDao.updatePost(post);
 
-        return new VoteResponse(postId, post.getPoints());
+        return new PostVoteResponse(postId, post.getPoints());
     }
 
     @Override
-    public List<PostResponse> getUpVotedPosts(BigInteger userId, BigInteger page) throws RestException {
-        List<PostResponse> posts = voteDao.getUpVotes(userId, page);
+    public List<PostResponse> getUpVotedPosts(BigInteger userId, BigInteger page) {
+        List<PostResponse> posts = postVoteDao.getUpVotes(userId, page);
 
         LOG.debug(posts);
 

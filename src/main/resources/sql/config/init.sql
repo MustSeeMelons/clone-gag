@@ -40,10 +40,27 @@ CREATE TABLE gag.POSTS(
     m_date TIMESTAMP
 );
 
-CREATE TABLE gag.VOTES(
+CREATE TABLE gag.POST_VOTES(
     id SERIAL PRIMARY KEY,
     owner bigint REFERENCES gag.USERS(id),
     post_id bigint REFERENCES gag.POSTS(id),
+    point SMALLINT NOT NULL
+);
+
+CREATE TABLE gag.COMMENTS(
+    id SERIAL PRIMARY KEY,
+    owner bigint REFERENCES gag.USERS(id) NOT NULL,
+    post_id bigint REFERENCES gag.POSTS(id),
+    parent_comment_id bigint REFERENCES gag.COMMENTS(id),
+    value text NOT NULL,
+    points bigint NOT NULL,
+    c_date TIMESTAMP NOT NULL
+);
+
+CREATE TABLE gag.COMMENT_VOTES(
+    id SERIAL PRIMARY KEY,
+    owner bigint REFERENCES gag.USERS(id),
+    comment_id bigint REFERENCES gag.COMMENTS(id),
     point SMALLINT NOT NULL
 );
 

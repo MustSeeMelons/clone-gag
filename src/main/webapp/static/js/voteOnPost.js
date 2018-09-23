@@ -9,6 +9,6 @@ function vote(postId, point) {
         }
     };
 
-    xhttp.open("GET", "${app.host}/post/vote/" + postId + "/" + point, true);
+    xhttp.open("GET", "${app.host}/${app.rest.post}/vote/" + postId + "/" + point, true);
     xhttp.send();
 }

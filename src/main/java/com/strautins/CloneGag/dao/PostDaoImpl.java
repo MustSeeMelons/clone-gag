@@ -1,8 +1,6 @@
 package com.strautins.CloneGag.dao;
 
 import com.strautins.CloneGag.definitions.FeedType;
-import com.strautins.CloneGag.exceptions.ExceptionManager;
-import com.strautins.CloneGag.exceptions.RestException;
 import com.strautins.CloneGag.model.Post;
 import com.strautins.CloneGag.pojo.PostPage;
 import org.hibernate.SessionFactory;
@@ -10,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.NoResultException;
-import java.awt.image.RescaleOp;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +40,7 @@ public class PostDaoImpl implements PostDao {
 
     @SuppressWarnings("unchecked")
     @Override
-    public PostPage getUserPosts(BigInteger userId, BigInteger page) throws RestException {
+    public PostPage getUserPosts(BigInteger userId, BigInteger page) {
         String countHql = "select count(p.id) from Post p";
         String hql = "from Post p where p.owner = :userId order by p.createDate DESC";
         Long count = 0L;
@@ -61,14 +58,12 @@ public class PostDaoImpl implements PostDao {
             return new PostPage(posts, page.longValue(), (long) Math.ceil((double) count / PAGE_SIZE));
         } catch (NoResultException e) {
             return new PostPage(new ArrayList<>(), page.longValue(), (long) Math.ceil((double) count / PAGE_SIZE));
-        } catch (Exception e) {
-            throw ExceptionManager.DBError(e);
         }
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<Post> getFeed(FeedType type, BigInteger page) throws RestException {
+    public List<Post> getFeed(FeedType type, BigInteger page) {
         String hql = "from Post p order by p.createDate DESC";
         try {
             List<Post> posts = sessionFactory.getCurrentSession().createQuery(hql)
@@ -83,8 +78,6 @@ public class PostDaoImpl implements PostDao {
             return posts;
         } catch (NoResultException e) {
             return new ArrayList<>();
-        } catch (Exception e) {
-            throw ExceptionManager.DBError(e);
         }
     }
 }

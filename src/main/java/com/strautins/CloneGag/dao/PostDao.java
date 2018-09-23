@@ -1,7 +1,6 @@
 package com.strautins.CloneGag.dao;
 
 import com.strautins.CloneGag.definitions.FeedType;
-import com.strautins.CloneGag.exceptions.RestException;
 import com.strautins.CloneGag.model.Post;
 import com.strautins.CloneGag.pojo.PostPage;
 
@@ -15,7 +14,7 @@ public interface PostDao {
 
     void updatePost(Post post);
 
-    PostPage getUserPosts(BigInteger userId, BigInteger page) throws RestException;
+    PostPage getUserPosts(BigInteger userId, BigInteger page);
 
-    List<Post> getFeed(FeedType type, BigInteger page) throws RestException;
+    List<Post> getFeed(FeedType type, BigInteger page);
 }

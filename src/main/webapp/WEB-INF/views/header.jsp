@@ -9,8 +9,10 @@
 
         <title>${pageTitle}</title>
         <link href="<c:url value='/static/css/bootstrap.min.css'/>" rel="stylesheet"></link>
-        <script src="<c:url value='/static/js/vote.js'/>"></script>
+        <script src="<c:url value='/static/js/voteOnPost.js'/>"></script>
         <script src="<c:url value='/static/js/util.js'/>"></script>
+        <script src="<c:url value='/static/js/redirectToPost.js'/>"></script>
+        <script src="<c:url value='/static/js/postComment.js'/>"></script>
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
     </head>
     <body>

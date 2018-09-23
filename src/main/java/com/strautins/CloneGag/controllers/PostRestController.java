@@ -3,9 +3,9 @@ package com.strautins.CloneGag.controllers;
 import com.strautins.CloneGag.definitions.FeedType;
 import com.strautins.CloneGag.exceptions.ExceptionManager;
 import com.strautins.CloneGag.exceptions.RestException;
-import com.strautins.CloneGag.pojo.PostPage;
-import com.strautins.CloneGag.pojo.PostResponse;
-import com.strautins.CloneGag.pojo.VoteResponse;
+import com.strautins.CloneGag.model.Comment;
+import com.strautins.CloneGag.pojo.*;
+import com.strautins.CloneGag.service.CommentService;
 import com.strautins.CloneGag.service.PostService;
 import com.strautins.CloneGag.service.UserService;
 import com.strautins.CloneGag.service.VoteService;
@@ -14,7 +14,9 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,23 +37,27 @@ public class PostRestController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private CommentService commentService;
+
+    @ExceptionHandler
+    public ErrorResponse handleExceptions(Exception e) {
+        LOG.error(e);
+        return new ErrorResponse("Internal error.", ExceptionManager.ProcessCodes.INTERNAL_ERROR.getCode());
+    }
+
     /**
      * REST endpoint for getting user posts.
      *
      * @return
-     * @throws RestException
      */
     @RequestMapping(value = "/{userId}/{page}", method = RequestMethod.GET)
     @ResponseBody
     public PostPage getUserPostPage(
             @PathVariable(value = "userId", required = false) BigInteger userId,
             @PathVariable("page") BigInteger page
-    ) throws RestException {
-        try {
-            return postService.getUserPosts(userId, page);
-        } catch (Exception e) {
-            throw ExceptionManager.InternalError(e);
-        }
+    ) {
+        return postService.getUserPosts(userId, page);
     }
 
     /**
@@ -59,19 +65,14 @@ public class PostRestController {
      *
      * @param type
      * @return
-     * @throws RestException
      */
     @RequestMapping(value = "/feed/{type}/{page}", method = RequestMethod.GET)
     @ResponseBody
     public List<PostResponse> getPostFeedPage(
             @PathVariable("type") FeedType type,
             @PathVariable("page") BigInteger page
-    ) throws RestException {
-        try {
-            return postService.getFeed(type, page);
-        } catch (Exception e) {
-            throw ExceptionManager.InternalError(e);
-        }
+    ) {
+        return postService.getFeed(type, page);
     }
 
     /**
@@ -80,22 +81,17 @@ public class PostRestController {
      * @param userId
      * @param page
      * @return
-     * @throws RestException
      */
     @RequestMapping(value = "/votes/{userId}/{page}", method = RequestMethod.GET)
     @ResponseBody
     public List<PostResponse> getUpVotedPostPage(
             @PathVariable(value = "userId", required = false) BigInteger userId,
             @PathVariable(value = "page", required = false) BigInteger page
-    ) throws RestException {
-        try {
-            if (userId == null) {
-                userId = userService.getCurrentUserId();
-            }
-            return voteService.getUpVotedPosts(userId, page);
-        } catch (Exception e) {
-            throw ExceptionManager.InternalError(e);
+    ) {
+        if (userId == null) {
+            userId = userService.getCurrentUserId();
         }
+        return voteService.getUpVotedPosts(userId, page);
     }
 
     /**
@@ -104,17 +100,63 @@ public class PostRestController {
      * @param postId
      * @param point
      * @return
-     * @throws RestException
      */
     @RequestMapping(value = "/vote/{id}/{point}", method = RequestMethod.GET)
     @ResponseBody
-    public VoteResponse vote(
+    public PostVoteResponse vote(
             @PathVariable(value = "id") BigInteger postId,
-            @PathVariable(value = "point") Integer point) throws RestException {
-        try {
-            return voteService.vote(postId, point);
-        } catch (Exception e) {
-            throw ExceptionManager.InternalError(e);
-        }
+            @PathVariable(value = "point") Integer point) {
+        return voteService.vote(postId, point);
     }
+
+    /**
+     * REST endpoint for commenting on posts and replying to comments.
+     *
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/comment/add", method = RequestMethod.POST)
+    @ResponseBody
+    public ProcessResponse addComment(@RequestBody @Valid AddCommentRequest request) {
+        BigInteger userId = userService.getCurrentUserId();
+
+        Comment comment = new Comment();
+        comment.setOwner(userId);
+        comment.setValue(request.getComment());
+        comment.setPostId(request.getPostId());
+        comment.setParentCommentId(request.getCommentId());
+        comment.setCreateDate(new Date());
+
+        commentService.saveComment(comment);
+
+        return new ProcessResponse(ExceptionManager.ProcessCodes.OK.getCode(), comment);
+    }
+
+    /**
+     * REST endpoint for getting top level comments for a post.
+     *
+     * @param postId
+     * @return
+     */
+    @RequestMapping(value = "comment/get/{postId}/{page}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<CommentResponse> getPostComments(
+            @PathVariable(value = "postId") BigInteger postId,
+            @PathVariable(value = "page") BigInteger page
+    ) {
+        return commentService.getPostComments(postId, page);
+    }
+
+    @RequestMapping(value = "comment/replies/{commentId}/{page}", method = RequestMethod.GET)
+    @ResponseBody
+    public List<CommentResponse> getCommentReplies(
+            @PathVariable(value = "postId") BigInteger commentId,
+            @PathVariable(value = "page") BigInteger page
+    ) {
+        return commentService.getCommentReplies(commentId, page);
+    }
+
+
+    // TODO add reply to comment (one sub level)
+    // TODO up-vote comments
 }

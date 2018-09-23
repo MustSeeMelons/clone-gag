@@ -1,12 +1,9 @@
 package com.strautins.CloneGag.controllers;
 
-import com.strautins.CloneGag.exceptions.RestException;
-import com.strautins.CloneGag.pojo.ErrorResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.validation.constraints.NotNull;
@@ -23,15 +20,6 @@ public class GlobalExceptionHandler {
     public String handlerNotFound(Exception e) {
         logException(e);
         return "redirect:/404";
-    }
-
-    @ResponseBody
-    @ExceptionHandler(RestException.class)
-    public ErrorResponse restExceptionHandler(RestException e) {
-        if (e.getE() != null) {
-            logException(e.getE());
-        }
-        return new ErrorResponse(e);
     }
 
     @ExceptionHandler(Exception.class)

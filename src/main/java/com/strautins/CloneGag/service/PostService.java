@@ -14,7 +14,7 @@ public interface PostService {
 
     Post loadPost(BigInteger id);
 
-    PostPage getUserPosts(BigInteger userId, BigInteger page) throws RestException;
+    PostPage getUserPosts(BigInteger userId, BigInteger page);
 
-    public List<PostResponse> getFeed(FeedType type, BigInteger page) throws RestException;
+    public List<PostResponse> getFeed(FeedType type, BigInteger page);
 }

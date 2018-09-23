@@ -32,12 +32,12 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostPage getUserPosts(BigInteger userId, BigInteger page) throws RestException {
+    public PostPage getUserPosts(BigInteger userId, BigInteger page) {
         return postDao.getUserPosts(userId, page);
     }
 
     @Override
-    public List<PostResponse> getFeed(FeedType type, BigInteger page) throws RestException {
+    public List<PostResponse> getFeed(FeedType type, BigInteger page) {
         return postDao.getFeed(type, page).stream()
                 .map((Post post) ->
                         new PostResponse(post)
