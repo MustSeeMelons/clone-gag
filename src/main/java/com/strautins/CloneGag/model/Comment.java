@@ -7,6 +7,7 @@ import java.util.Date;
 @Entity
 @Table(name = "COMMENTS", schema = "gag")
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
@@ -27,6 +28,10 @@ public class Comment {
 
     @Column(name = "c_date", nullable = false)
     private Date createDate;
+
+    public void modifyPoints(Integer value) {
+        points = points.add(BigInteger.valueOf(value));
+    }
 
     public BigInteger getId() {
         return id;

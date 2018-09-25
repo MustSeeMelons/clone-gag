@@ -2,11 +2,11 @@ package com.strautins.CloneGag.pojo;
 
 import java.math.BigInteger;
 
-public class PostVoteResponse {
+public class VoteResponse {
     private BigInteger id;
     private BigInteger votes;
 
-    public PostVoteResponse(BigInteger id, BigInteger votes) {
+    public VoteResponse(BigInteger id, BigInteger votes) {
         this.id = id;
         this.votes = votes;
     }

@@ -2,7 +2,6 @@ package com.strautins.CloneGag.controllers;
 
 import com.strautins.CloneGag.definitions.FeedType;
 import com.strautins.CloneGag.exceptions.ExceptionManager;
-import com.strautins.CloneGag.exceptions.RestException;
 import com.strautins.CloneGag.model.Comment;
 import com.strautins.CloneGag.pojo.*;
 import com.strautins.CloneGag.service.CommentService;
@@ -103,10 +102,25 @@ public class PostRestController {
      */
     @RequestMapping(value = "/vote/{id}/{point}", method = RequestMethod.GET)
     @ResponseBody
-    public PostVoteResponse vote(
+    public VoteResponse vote(
             @PathVariable(value = "id") BigInteger postId,
             @PathVariable(value = "point") Integer point) {
-        return voteService.vote(postId, point);
+        return voteService.voteOnPost(postId, point);
+    }
+
+    /**
+     * REST endpoint for voting on comments.
+     *
+     * @param postId
+     * @param point
+     * @return
+     */
+    @RequestMapping(value = "/comment/vote/{id}/{point}", method = RequestMethod.GET)
+    @ResponseBody
+    public VoteResponse commentVote(
+            @PathVariable(value = "id") BigInteger comemntId,
+            @PathVariable(value = "point") Integer point) {
+        return voteService.voteOnComment(comemntId, point);
     }
 
     /**
@@ -150,13 +164,11 @@ public class PostRestController {
     @RequestMapping(value = "comment/replies/{commentId}/{page}", method = RequestMethod.GET)
     @ResponseBody
     public List<CommentResponse> getCommentReplies(
-            @PathVariable(value = "postId") BigInteger commentId,
+            @PathVariable(value = "commentId") BigInteger commentId,
             @PathVariable(value = "page") BigInteger page
     ) {
         return commentService.getCommentReplies(commentId, page);
     }
 
-
-    // TODO add reply to comment (one sub level)
     // TODO up-vote comments
 }

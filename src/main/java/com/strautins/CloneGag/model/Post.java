@@ -1,6 +1,5 @@
 package com.strautins.CloneGag.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.strautins.CloneGag.model.validators.ValidImageConstraint;
 import com.strautins.CloneGag.model.validators.ValidTagConstraint;
 import com.strautins.CloneGag.utils.ImageUtils;
