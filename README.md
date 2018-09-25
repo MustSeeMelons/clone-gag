@@ -33,6 +33,8 @@ How to use:
 - mvn clean install -P{profile}
   - where profile is docker-local or docker-dev 
 - docker compose up
+- goto: http://{host}:8080/cloneGag/post
+  - where host is localhost (docker-local) or what is in the other profile
 
 Next up?
 -
