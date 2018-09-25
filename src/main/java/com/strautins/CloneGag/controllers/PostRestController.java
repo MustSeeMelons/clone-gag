@@ -169,6 +169,4 @@ public class PostRestController {
     ) {
         return commentService.getCommentReplies(commentId, page);
     }
-
-    // TODO up-vote comments
 }

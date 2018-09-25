@@ -1,10 +1,43 @@
-clone_gag
+CloneGag, hehe.
 ===
 
-A crappy clone of 9Gag.
+A Java clone of 9Gag using:
+- Spring 4
+- Spting Security 4
+- Hibernate 5
+- PostgreSQL
 
-Using .jsp for the lol's.
+This is more of a back-end exercise, so the client side is Bootstrap in jsp's with embedded js, not so pretty, but works good enough.
 
-Should use Thymeleaf (or similar) or even better, detach client form the server.
+The REST endpoint never tell you what went wrong, must look at the logs for that.
 
-But this is a spring exercise.
+What does it support?
+- user registration/login/logout
+- new post addition
+- voting on posts
+- commenting on posts
+- replying to comments
+- voting on comments
+- basic fresh page
+- user upvote page
+- user post page
+
+Prerequisites:
+-
+- Maven
+- Java 8+
+- Docker
+
+How to use:
+-
+- mvn clean install -P{profile}
+  - where profile is docker-local or docker-dev 
+- docker compose up
+
+Next up?
+-
+- User profiles?
+- User activity feed?
+- Notifications?
+- GIF's?
+- Post deletion?
