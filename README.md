@@ -38,6 +38,7 @@ How to use:
 
 Next up?
 -
+- Tests?
 - User profiles?
 - User activity feed?
 - Notifications?
